@@ -1,0 +1,1 @@
+/home/pr1nx3/open_si/kkiapay-flutter-sdk/example/build/app/intermediates/cxx/Debug/6a3o44u4/obj/arm64-v8a

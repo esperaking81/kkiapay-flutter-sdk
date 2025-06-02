@@ -3,6 +3,7 @@ import 'dart:ui';
 
 /// developer account public api key
 const public_api_key = "XXX";
+
 /// widget default theme
 const defaultTheme = "#4E6BFC";
 
@@ -23,10 +24,48 @@ const url = "";
 const host = "";
 
 /// Widget payment Mode
-enum PaymentMethod {
-  momo,
-  card,
-  direct_debit
+enum PaymentMethod { momo, card, direct_debit }
+
+/// Class Providers
+/// @Params : Widget accept and exclude providers
+///
+/// Available providers by payment method:
+///
+/// Mobile Money (momo):
+/// - mtn: ["BJ", "CI"]
+/// - moov: ["BJ", "CI", "TG"] (can also be specified as moov-tg, moov-bj, etc.)
+/// - orange: ["CI", "SN"]
+/// - celtiis: ["BJ"]
+/// - mixx: ["TG", "SN"]
+/// - airtel: ["NE"]
+/// - wave: ["CI", "SN"]
+///
+/// Card payments:
+/// - mastercard, visa, verve (no country restrictions)
+///
+/// Wallet:
+/// - wave: ["CI", "SN"]
+/// - idmoney: ["BJ"]
+/// - corismoney: ["BJ"]
+///
+/// Ex : Providers(accept: ["moov-tg"], exclude: ["orange-ci"])
+/// To ensure exclusion of providers make sure to exclude them for each country. like:
+/// Providers(accept: ["moov-tg"], exclude: ["orange-ci", "celtiis-bj", "celtiis-tg", "orange-sn"])
+class Providers {
+  final List<String>? accept;
+  final List<String>? exclude;
+
+  Providers({
+    this.accept,
+    this.exclude,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      if (accept != null) 'accept': accept,
+      if (exclude != null) 'exclude': exclude,
+    };
+  }
 }
 
 /// Widget event
@@ -48,7 +87,8 @@ const PAYMENT_INIT = 'PAYMENT_INIT';
 const PAYMENT_ABORTED = 'PAYMENT_ABORTED';
 const PENDING_PAYMENT = 'PENDING_PAYMENT';
 const ON_USER_FEEDBACK = 'ON_USER_FEEDBACK';
-@Deprecated('We no longer send this event: in case of failure the client can either try again or cancel')
+@Deprecated(
+    'We no longer send this event: in case of failure the client can either try again or cancel')
 const PAYMENT_FAILED = 'PAYMENT_FAILED';
 const PAYMENT_SUCCESS = 'PAYMENT_SUCCESS';
 const PAYMENT_CANCELLED = 'PAYMENT_CANCELLED';
@@ -58,12 +98,11 @@ const UNKNOWN_EVENT = 'UNKNOWN_EVENT';
 
 const WAVE_LINK = 'WAVE_LINK';
 
-
-
 class SdkData {
   SdkData({
     this.amount,
     this.paymentMethod,
+    this.providers,
     this.reason,
     this.name,
     this.email,
@@ -78,15 +117,27 @@ class SdkData {
   });
 
   final int? amount;
-  final reason, name, email, sandbox, phone, data, apikey, theme, paymentMethod, callbackUrl, countries,partnerId;
+  final reason,
+      name,
+      email,
+      sandbox,
+      phone,
+      data,
+      apikey,
+      theme,
+      paymentMethod,
+      callbackUrl,
+      countries,
+      partnerId;
+  final Providers? providers;
 
   Map<String, dynamic> toMap() {
-    return {
+    final map = <String, dynamic>{
       'partnerId': partnerId,
       'countries': countries,
       'serviceId': "INTEGRATION",
       'amount': amount,
-      'paymentMethods': paymentMethod ?? ["momo","card","direct_debit"],
+      'paymentMethods': paymentMethod ?? ["momo", "card", "direct_debit"],
       'reason': reason,
       'fullname': name,
       'email': email,
@@ -100,6 +151,11 @@ class SdkData {
       'host': host,
       'data': data
     };
+    if (providers != null) {
+      map['providers'] = providers!.toMap();
+    }
+
+    return map;
   }
 
   String toBase64() {

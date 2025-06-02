@@ -8,9 +8,7 @@ import '../../../kkiapay_flutter_sdk_web.dart';
 import '../../utils/config.dart';
 import '../mobile/kkiapay.dart';
 
-
-class KKiaPayWeb extends KkiapayFlutterSdkPlatform  {
-
+class KKiaPayWeb extends KkiapayFlutterSdkPlatform {
   /// Constructs
   KKiaPayWeb();
 
@@ -19,9 +17,7 @@ class KKiaPayWeb extends KkiapayFlutterSdkPlatform  {
   }
 
   @override
-  Future pay (
-      KKiaPay paymentRequest,
-      BuildContext context,
+  Future pay(KKiaPay paymentRequest, BuildContext context,
       Function(dynamic, BuildContext) callback) async {
     final data = js.JsObject.jsify({
       'amount': paymentRequest.amount.toString(),
@@ -35,11 +31,12 @@ class KKiaPayWeb extends KkiapayFlutterSdkPlatform  {
       'reason': paymentRequest.reason.toString(),
       'partnerId': paymentRequest.partnerId.toString(),
       'countries': paymentRequest.countries,
+      'provider': paymentRequest.providers.toString(),
     });
 
     void onSuccessListener(js.JsObject response) async {
-      callback( {
-        'requestData':  {
+      callback({
+        'requestData': {
           'amount': paymentRequest.amount,
           'key': paymentRequest.apikey,
           'sandbox': paymentRequest.sandbox,
@@ -51,15 +48,15 @@ class KKiaPayWeb extends KkiapayFlutterSdkPlatform  {
           'countries': paymentRequest.countries.toString(),
           'reason': paymentRequest.reason.toString(),
           'partnerId': paymentRequest.partnerId.toString(),
+          'provider': paymentRequest.providers.toString()
         },
         'transactionId': response["transactionId"],
         'status': PAYMENT_SUCCESS
-      },context );
+      }, context);
     }
 
     js.context.callMethod('addSuccessListener', [onSuccessListener]);
 
     js.context.callMethod('openKkiapayWidget', [data]);
   }
-
 }

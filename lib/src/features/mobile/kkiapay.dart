@@ -71,25 +71,29 @@ class KKiaPay extends StatefulWidget {
   /// Ex : ["momo","card"]
   final List<String>? paymentMethods;
 
-  const KKiaPay({
-    super.key,
-    /* Payment info */
-    required this.amount,
-    required this.callback,
-    this.reason = "",
-    this.phone = "",
-    this.name = "",
-    this.email = "",
-    this.data = "",
-    this.partnerId = "",
-    this.callbackUrl = "",
-    /* Widget ui config */
-    required this.apikey,
-    required this.sandbox,
-    this.theme = defaultTheme,
-    this.countries = const ["BJ","CI","SN","TG"],
-    this.paymentMethods = const ["momo", "card"]
-  });
+  /// @Params : Widget accept and exclude providers
+  /// Ex : Providers(accept: ["wave","momo"], exclude: ["orange"])
+  final Providers? providers;
+
+  const KKiaPay(
+      {super.key,
+      /* Payment info */
+      required this.amount,
+      required this.callback,
+      this.reason = "",
+      this.phone = "",
+      this.name = "",
+      this.email = "",
+      this.data = "",
+      this.partnerId = "",
+      this.callbackUrl = "",
+      /* Widget ui config */
+      required this.apikey,
+      required this.sandbox,
+      this.theme = defaultTheme,
+      this.countries = const ["BJ", "CI", "SN", "TG"],
+      this.providers,
+      this.paymentMethods = const ["momo", "card"]});
 
   @override
   State<KKiaPay> createState() => _KKiaPayState();
@@ -124,6 +128,7 @@ class _KKiaPayState extends State<KKiaPay> {
           reason: widget.reason,
           amount: widget.amount,
           paymentMethod: widget.paymentMethods,
+          providers: widget.providers,
           partnerId: widget.partnerId,
           countries: widget.countries,
           phone: widget.phone,
@@ -180,9 +185,8 @@ class _KKiaPayState extends State<KKiaPay> {
             ),
           )
           ..addJavaScriptChannel('SDK_CHANNEL', onMessageReceived: (message) {
-
             if (kDebugMode) {
-              print(const JsonDecoder().convert(message.message));
+              debugPrint(const JsonDecoder().convert(message.message));
             }
 
             switch (const JsonDecoder().convert(message.message)["name"]) {
@@ -243,7 +247,6 @@ class _KKiaPayState extends State<KKiaPay> {
                 break;
             }
           });
-
 
         /// Change status bar if ios devise
         if (!Platform.isIOS) {
