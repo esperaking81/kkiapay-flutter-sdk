@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:kkiapay_flutter_sdk/utils/utils.dart';
 import 'package:stacked/stacked.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../../utils/config.dart';
+import 'package:kkiapay_flutter_sdk/src/utils/utils.dart';
+import 'package:kkiapay_flutter_sdk/src/utils/config.dart';
 import 'widget_builder_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -72,7 +72,29 @@ class KKiaPay extends StatefulWidget {
   final List<String>? paymentMethods;
 
   /// @Params : Widget accept and exclude providers
-  /// Ex : Providers(accept: ["wave","momo"], exclude: ["orange"])
+  ///
+  /// Available providers by payment method:
+  ///
+  /// Mobile Money (momo):
+  /// - mtn: ["BJ", "CI"]
+  /// - moov: ["BJ", "CI", "TG"] (can also be specified as moov-tg, moov-bj, etc.)
+  /// - orange: ["CI", "SN"]
+  /// - celtiis: ["BJ"]
+  /// - mixx: ["TG", "SN"]
+  /// - airtel: ["NE"]
+  /// - wave: ["CI", "SN"]
+  ///
+  /// Card payments:
+  /// - mastercard, visa, verve (no country restrictions)
+  ///
+  /// Wallet:
+  /// - wave: ["CI", "SN"]
+  /// - idmoney: ["BJ"]
+  /// - corismoney: ["BJ"]
+  ///
+  /// Ex : Providers(accept: ["moov-tg"], exclude: ["orange-ci"])
+  /// To ensure exclusion of providers make sure to exclude them for each country. like:
+  /// Providers(accept: ["moov-tg"], exclude: ["orange-ci", "celtiis-bj", "celtiis-tg", "orange-sn"])
   final Providers? providers;
 
   const KKiaPay({

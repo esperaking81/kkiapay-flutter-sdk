@@ -27,30 +27,7 @@ const host = "";
 enum PaymentMethod { momo, card, direct_debit }
 
 /// Class Providers
-/// @Params : Widget accept and exclude providers
-///
-/// Available providers by payment method:
-///
-/// Mobile Money (momo):
-/// - mtn: ["BJ", "CI"]
-/// - moov: ["BJ", "CI", "TG"] (can also be specified as moov-tg, moov-bj, etc.)
-/// - orange: ["CI", "SN"]
-/// - celtiis: ["BJ"]
-/// - mixx: ["TG", "SN"]
-/// - airtel: ["NE"]
-/// - wave: ["CI", "SN"]
-///
-/// Card payments:
-/// - mastercard, visa, verve (no country restrictions)
-///
-/// Wallet:
-/// - wave: ["CI", "SN"]
-/// - idmoney: ["BJ"]
-/// - corismoney: ["BJ"]
-///
-/// Ex : Providers(accept: ["moov-tg"], exclude: ["orange-ci"])
-/// To ensure exclusion of providers make sure to exclude them for each country. like:
-/// Providers(accept: ["moov-tg"], exclude: ["orange-ci", "celtiis-bj", "celtiis-tg", "orange-sn"])
+
 class Providers {
   final List<String>? accept;
   final List<String>? exclude;
