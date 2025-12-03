@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:kkiapay_flutter_sdk/utils/config.dart';
-import 'package:kkiapay_flutter_sdk/utils/utils.dart';
+import 'package:kkiapay_flutter_sdk/src/utils/utils.dart';
+import 'package:kkiapay_flutter_sdk/src/utils/config.dart';
 import 'package:stacked/stacked.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 

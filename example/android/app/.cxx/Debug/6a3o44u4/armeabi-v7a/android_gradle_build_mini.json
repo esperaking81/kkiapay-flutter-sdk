@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/pr1nx3/snap/flutter/common/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/pr1nx3/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/pr1nx3/open_si/kkiapay-flutter-sdk/example/android/app/.cxx/Debug/6a3o44u4/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/pr1nx3/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/pr1nx3/open_si/kkiapay-flutter-sdk/example/android/app/.cxx/Debug/6a3o44u4/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

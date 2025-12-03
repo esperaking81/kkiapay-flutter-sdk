@@ -1,0 +1,2 @@
+/home/pr1nx3/open_si/kkiapay-flutter-sdk/example/android/app/.cxx/Debug/6a3o44u4/x86/CMakeFiles/edit_cache.dir
+/home/pr1nx3/open_si/kkiapay-flutter-sdk/example/android/app/.cxx/Debug/6a3o44u4/x86/CMakeFiles/rebuild_cache.dir

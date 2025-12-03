@@ -3,6 +3,7 @@ import 'dart:ui';
 
 /// developer account public api key
 const public_api_key = "XXX";
+
 /// widget default theme
 const defaultTheme = "#4E6BFC";
 
@@ -23,10 +24,25 @@ const url = "";
 const host = "";
 
 /// Widget payment Mode
-enum PaymentMethod {
-  momo,
-  card,
-  direct_debit
+enum PaymentMethod { momo, card, direct_debit }
+
+/// Class Providers
+
+class Providers {
+  final List<String>? accept;
+  final List<String>? exclude;
+
+  Providers({
+    this.accept,
+    this.exclude,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      if (accept != null) 'accept': accept,
+      if (exclude != null) 'exclude': exclude,
+    };
+  }
 }
 
 /// Widget event
@@ -48,7 +64,8 @@ const PAYMENT_INIT = 'PAYMENT_INIT';
 const PAYMENT_ABORTED = 'PAYMENT_ABORTED';
 const PENDING_PAYMENT = 'PENDING_PAYMENT';
 const ON_USER_FEEDBACK = 'ON_USER_FEEDBACK';
-@Deprecated('We no longer send this event: in case of failure the client can either try again or cancel')
+@Deprecated(
+    'We no longer send this event: in case of failure the client can either try again or cancel')
 const PAYMENT_FAILED = 'PAYMENT_FAILED';
 const PAYMENT_SUCCESS = 'PAYMENT_SUCCESS';
 const PAYMENT_CANCELLED = 'PAYMENT_CANCELLED';
@@ -58,12 +75,11 @@ const UNKNOWN_EVENT = 'UNKNOWN_EVENT';
 
 const WAVE_LINK = 'WAVE_LINK';
 
-
-
 class SdkData {
   SdkData({
     this.amount,
     this.paymentMethod,
+    this.providers,
     this.reason,
     this.name,
     this.email,
@@ -78,15 +94,27 @@ class SdkData {
   });
 
   final int? amount;
-  final reason, name, email, sandbox, phone, data, apikey, theme, paymentMethod, callbackUrl, countries,partnerId;
+  final reason,
+      name,
+      email,
+      sandbox,
+      phone,
+      data,
+      apikey,
+      theme,
+      paymentMethod,
+      callbackUrl,
+      countries,
+      partnerId;
+  final Providers? providers;
 
   Map<String, dynamic> toMap() {
-    return {
+    final map = <String, dynamic>{
       'partnerId': partnerId,
       'countries': countries,
       'serviceId': "INTEGRATION",
       'amount': amount,
-      'paymentMethods': paymentMethod ?? ["momo","card","direct_debit"],
+      'paymentMethods': paymentMethod ?? ["momo", "card", "direct_debit"],
       'reason': reason,
       'fullname': name,
       'email': email,
@@ -100,6 +128,11 @@ class SdkData {
       'host': host,
       'data': data
     };
+    if (providers != null) {
+      map['providers'] = providers!.toMap();
+    }
+
+    return map;
   }
 
   String toBase64() {

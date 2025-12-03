@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:kkiapay_flutter_sdk/utils/utils.dart';
 import 'package:stacked/stacked.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../../utils/config.dart';
+import 'package:kkiapay_flutter_sdk/src/utils/utils.dart';
+import 'package:kkiapay_flutter_sdk/src/utils/config.dart';
 import 'widget_builder_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'dart:io';
+// import './utils/config.dart';
 part 'view.part.dart';
 
 class KKiaPay extends StatefulWidget {
@@ -70,6 +71,32 @@ class KKiaPay extends StatefulWidget {
   /// Ex : ["momo","card"]
   final List<String>? paymentMethods;
 
+  /// @Params : Widget accept and exclude providers
+  ///
+  /// Available providers by payment method:
+  ///
+  /// Mobile Money (momo):
+  /// - mtn: ["BJ", "CI"]
+  /// - moov: ["BJ", "CI", "TG"] (can also be specified as moov-tg, moov-bj, etc.)
+  /// - orange: ["CI", "SN"]
+  /// - celtiis: ["BJ"]
+  /// - mixx: ["TG", "SN"]
+  /// - airtel: ["NE"]
+  /// - wave: ["CI", "SN"]
+  ///
+  /// Card payments:
+  /// - mastercard, visa, verve (no country restrictions)
+  ///
+  /// Wallet:
+  /// - wave: ["CI", "SN"]
+  /// - idmoney: ["BJ"]
+  /// - corismoney: ["BJ"]
+  ///
+  /// Ex : Providers(accept: ["moov-tg"], exclude: ["orange-ci"])
+  /// To ensure exclusion of providers make sure to exclude them for each country. like:
+  /// Providers(accept: ["moov-tg"], exclude: ["orange-ci", "celtiis-bj", "celtiis-tg", "orange-sn"])
+  final Providers? providers;
+
   const KKiaPay({
     Key? key,
     /* Payment info */
@@ -88,6 +115,7 @@ class KKiaPay extends StatefulWidget {
     this.theme,
     this.countries,
     this.paymentMethods,
+    this.providers,
   }) : super(key: key);
 
   @override
@@ -123,6 +151,7 @@ class _KKiaPayState extends State<KKiaPay> {
           reason: widget.reason,
           amount: widget.amount,
           paymentMethod: widget.paymentMethods,
+          providers: widget.providers,
           partnerId: widget.partnerId,
           countries: widget.countries,
           phone: widget.phone,
@@ -179,8 +208,7 @@ class _KKiaPayState extends State<KKiaPay> {
             ),
           )
           ..addJavaScriptChannel('SDK_CHANNEL', onMessageReceived: (message) {
-
-            print(JsonDecoder().convert(message.message));
+            debugPrint(JsonDecoder().convert(message.message));
 
             switch (JsonDecoder().convert(message.message)["name"]) {
               case CLOSE_WIDGET:
@@ -239,7 +267,6 @@ class _KKiaPayState extends State<KKiaPay> {
                 break;
             }
           });
-
 
         /// Change status bar if ios devise
         if (!Platform.isIOS) {
